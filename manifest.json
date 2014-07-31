@@ -4,11 +4,16 @@
   "manifest_version": 2,
   "description": "Organize your tabs on cloud",
   "permissions": [
-    "tabs", "chrome://favicon/*", "http://www.google.com/", "https://www.google.com/"
+    "alarms",
+    "webNavigation",
+    "tabs", 
+    "chrome://favicon/*", 
+    "*://*.google.com/"
   ],
   "content_security_policy": "script-src 'self' https://api.embed.ly; object-src 'self'",
-  "background": { "scripts": ["jquery-2.0.0.min.js", "ready.js"] },
-  "background_page": "background.html",
+  "background": { 
+    "persistent": false,
+    "page": "background.html" },
   "browser_action": {
       "default_title": "Show Tabs in Nutab",
       "default_icon": "icon_24.png"

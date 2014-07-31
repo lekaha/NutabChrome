@@ -51,6 +51,10 @@ function getDomainFromUrl(url) {
 	return host;
 }
 
+function getWindowTabsCount(window) {
+	return window.tabs.length;
+}
+
 function getTabsCount(windowList) {
 	var count = 0;
 	for (var i = 0; i < windowList.length; i++) {
@@ -59,42 +63,28 @@ function getTabsCount(windowList) {
 	return count;
 }
 
-function getWindowTabsCount(window) {
-	return window.tabs.length;
+function onTabsCountChange(count) {
+    chrome.browserAction.setBadgeBackgroundColor({color: "#123123"});
+	chrome.browserAction.setBadgeText({text: count.toString()});
+	  
+	console.log("tab count = " + count);
 }
 
-function checkForValidUrl(tabId, changeInfo, tab) {
-	/*if(getDomainFromUrl(tab.url).toLowerCase() == tab.url){
-		//chrome.pageAction.show(tabId);
-        chrome.browserAction.setBadgeText({text:data.unreadItems});
-        console.log("tab count = " + t);
-	}*/
-
-  var t = 0;
+function getAllWindowTabs() {
   chrome.windows.getAll(
   	{ populate: true }, 
   	function(windowList) {
-	  t = getTabsCount(windowList);
-	  chrome.browserAction.setBadgeBackgroundColor({color: "#123123"});
-	  chrome.browserAction.setBadgeText({text: t.toString()});
-	  
-	  console.log("tab count = " + t);
+	  var c = getTabsCount(windowList);
+	  onTabsCountChange(c);  
   	}
   );
+}
+
+function checkForValidUrl(tabId, changeInfo, tab) {
+  getAllWindowTabs();
 };
 
-chrome.browserAction.onClicked.addListener(function() {
-  var t = 0;
-  chrome.windows.getAll({ populate: true }, 
-  	function(windowList) {
-    t = getTabsCount(windowList);
-    chrome.browserAction.setBadgeBackgroundColor({color: "#123123"});
-    chrome.browserAction.setBadgeText({text: t.toString()});
-  });
-
-
-  
-});
+chrome.browserAction.onClicked.addListener(getAllWindowTabs);
 
 chrome.tabs.onUpdated.addListener(checkForValidUrl);
 chrome.tabs.onActivated.addListener(function(info) {
