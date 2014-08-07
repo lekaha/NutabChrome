@@ -56,6 +56,8 @@ function getAllWindowTabs() {
 
 function onLogout() {
     delete localStorage.nutabid;
+    updateIcon(false);
+    setActionPopup(false);
 }
 
 function onLogin() {
@@ -64,6 +66,10 @@ function onLogin() {
 
 function onNeedLogin() {
 
+}
+
+function setLoginData(id) {
+    localStorage.nutabid = id;
 }
 
 function isLogged() {
@@ -337,6 +343,7 @@ function drawIconAtRotation() {
 function goToInbox() {
   D('Going to inbox...');
   isLogged();
+  onLogout();
   chrome.tabs.getAllInWindow(undefined, function(tabs) {
     for (var i = 0, tab; tab = tabs[i]; i++) {
       if (tab.url && isGmailUrl(tab.url)) {
