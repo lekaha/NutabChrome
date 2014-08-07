@@ -90,7 +90,7 @@ function setActionPopup(enable) {
     if(!enable) {
       	chrome.browserAction.setPopup(
       		{
-      			popup: "popup.html"
+      			popup: "login.html"
       		}
       	);
     }
